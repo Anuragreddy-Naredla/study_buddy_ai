@@ -1,0 +1,7 @@
+README.md
+setup.py
+STUDY_BUDDY_AI.egg-info/PKG-INFO
+STUDY_BUDDY_AI.egg-info/SOURCES.txt
+STUDY_BUDDY_AI.egg-info/dependency_links.txt
+STUDY_BUDDY_AI.egg-info/requires.txt
+STUDY_BUDDY_AI.egg-info/top_level.txt

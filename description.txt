@@ -1,0 +1,55 @@
+1. This project helps us to taking the questions realeted to topic.
+2. Here we can select the difficulty level and we can select the MCQ's or Fill in the blanks also.
+3. Key teckstack will be:
+    a. Minikube=> which helps us to create the kubernetes cluster using jenkins which is for CI Part tool and ArgoCD for CD part this is used 
+                  only for kubernetes.
+    b. Gitops=>Deploy and manage infrastructure or applications using Git as the source of truth
+    c. GROQ=> to generate the MCQ's and fill in the blanks we will use a LLM LLama3 from GROQ.
+    d. DokcerHub=> To store the docker images
+    e. Streamlit=> To create the user interface
+    f. Docker=>for conteinarization
+    g. GCP=> for deployment
+    h.Langchain=> Generative AI framework to interact with the LLM
+
+WHY GITOPS AND WHAT IS GITOPS?
+Lets take there are 2pipelines which are Normal Pipeline and GitOps Pipeline and also have 3stages Codecheckout, Build & Push and Deploy stage
+Normal Pipeline:
+=> In Normal Pipeline 1st time we builded the pipeline Successfully but in the 2nd time my 3rd stage fails.So our app will fail completely here.
+GitOps Pipeline:
+=> In GitOps pipeline 1st time we builded the pipeline Successfully after bulding Successfully we will record this as a commit git but at the 
+   2nd time my 3rd stage fails so with the help of ArgoCD it will rollback with the Successfully runned pipeline due to this my app will not stop
+   working here.
+
+WORKFLOW:
+A. Development and setup
+Project and API setup->Configuration code->Question Schemas Models Code->Prompt Templates Code->Groq Client Setup Code->Question Generator Code->Helper Class Code
+B. Application
+Helper Class Codes->Main Application
+C. Versioning and Containerization
+Main Application->Code Versioning->DockerFile
+D. Infrastructure and Deployment
+DockerFile->kubernetes Manifest Files->GCP VM Instance Setup
+E. CI Pipeline by Jenkins
+GCP VM Instance Setup->jenkins setup->Github Integration with jenkins
+F. CD Pipeline by ArgoCD
+Github Integration with jenkins->Build and Push Docker image-> ArgoCD Setup->Webhooks Github
+
+
+Project and API setup=>create the Virtual environment and install necessary libraries and project structure
+Configuration code=>setup the models from Groq or Openai etc...
+Question Schemas Models Code=>relates to Pydantic for datamodels how the output should like
+Prompt Templates Code=>Instructions given to LLM how the LLM model should behave
+Groq Client Setup Code=>related to groq api we will create the temp which are arguments to LLM
+Question Generator Code=>Logic for generating the question
+Helper Class Code=>which are utilities functions inside our application code
+Main Application=>create the main functions in helper class code then integrate in the main application code
+Code Versioning=>keeps track record of commits and code changes etc...
+DockerFile=>conatin the logic for Containerization
+kubernetes Manifest Files=>conatins 2 things service file and deployment file
+GCP VM Instance Setup=>install 3things which are Docker Engine, Minikube(for installation of minikube we require docker Engine) and Kubectl(to interact with the kubernetes cluster we need this)
+jenkins setup=>setup for jenkins in VM
+Github Integration with jenkins=>takes the latest code
+Build and Push Docker image=>bulding and pushing the docker image to DockerHub
+ArgoCD Setup=>installing the argocd and setup
+Webhooks Github=>Whenever we build the pipeline we have to come to jenkins dashboard then wewill click on blue button to run the application this will be done automatically with the webhook
+
