@@ -5,7 +5,7 @@
                   only for kubernetes.
     b. Gitops=>Deploy and manage infrastructure or applications using Git as the source of truth
     c. GROQ=> to generate the MCQ's and fill in the blanks we will use a LLM LLama3 from GROQ.
-    d. DokcerHub=> To store the docker images
+    d. DockerHub=> To store the docker images
     e. Streamlit=> To create the user interface
     f. Docker=>for conteinarization
     g. GCP=> for deployment

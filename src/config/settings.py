@@ -8,5 +8,5 @@ class Settings:
     TEMPERATURE=0.9
     MAX_RETRIES=3#No of retries for api calls
 
-settings_ob=Settings()
+settings_obj=Settings()
 
