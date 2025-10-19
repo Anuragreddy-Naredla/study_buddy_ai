@@ -308,5 +308,69 @@ streamlit run application.py
     14. In the Jenkins file under DOCKER_HUB_REPO give your created dockerhub repo, under DOCKER_HUB_CREDENTIALS_ID give your jenkins created 
         credentials like dockerhub-token
     15. In the deployment file under image give your docker hub image name like anuragreddynaredla/studybuddy:latest
+    16. commit the code
+    17. In the VMInstance type "git pull origin main"
+    18. Now Build the Docker image for building goto Jenkins dashboard=>click on Build Now
+    19. After Building the Docker Image we will see that particular image in dockerhub
+22. Setup the ArgoCD for Deployment for setup type below commands in VMInstance
+    1. kubectl get namespace
+    2. kubectl create ns argocd
+    3. kubectl get namespace
+    4. kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    5. kubectl get all -n argocd
+    6. kubectl get svc -n argocd
+    7. kubectl edit svc argocd-server -n argocd
+        =>Instead of this  "type: ClusterIP" give "type: NodePort" to make it as public we are changing
+    8. kubectl get svc -n argocd
+    9. kubectl port-forward --address 0.0.0.0 service/argocd-server 31704:80 -n argocd
+    10. copy the external IP and paste it in new browser and write :31704
+        http://35.184.237.150:31704/
+    11. Now we will loginto the ArgoCd with above LINK
+        1. give username as "admin"
+        2. To get the password type this command in new VMInstance terminal not in old terminal
+            kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+        3. Finally give the username and password from VMInstance then click on Signin
+    12. In the new terminal only type below commands
+        a. cd ~
+        b. ls -la
+        c. ls -la .kube/
+        d. cat .kube/config
+            copy the content and paste somewhere
+            change this to certificate-authority=>certificate-authority-data
+            change this to client-certificate=>client-certificate-data
+            change this to client-key=>client-key-data
 
+        e. cat /home/anuragreddy1011/.minikube/ca.crt | base64 -w 0; echo [GIVE YOUR PATH FROM ABOVE COMMAND WE WILL GET]
+        certificate-authority-data: /home/anuragreddy1011/.minikube/ca.crt
+        certificate-authority-data: LS0tLERXdwdGFXNXAKYTNWaVpVTkJRDVqSGJvcnd3enRybBzZG1QdnBqckNCTE5oZUNaRnlWYlhkUXJJbm4xOWx0ClNYUmR3SWNaSWpo [IT SHOULD LOOK LIKE THIS]
+        f. cat /home/anuragreddy1011/.minikube/profiles/minikube/client.crt | base64 -w 0; echo[GIVE YOUR PATH FROM ABOVE COMMAND WE WILL GET]
+        client-certificate-data: /home/anuragreddy1011/.minikube/profiles/minikube/client.crt
+        client-certificate-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURJbGNuTXzcndzL0lWMStkWElDN050VlUrMWQkdFdjRvUzk2aCtCSmFHTEtMUE9PTUJzdktCeDlaMG1UWVl3RlRs
+        g. cat /home/anuragreddy1011/.minikube/profiles/minikube/client.key | base64 -w 0; echo[GIVE YOUR PATH FROM ABOVE COMMAND WE WILL GET]
+        client-key-data: /home/anuragreddy1011/.minikube/profiles/minikube/client.key
+        client-key-data: UdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURJbGNuTXzcndzL0lWMStkWElDN050VlUrMWQkdFdjRvUzUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURJbGNuTXzcndzL0lWMStkWElDN050VlUrMWQkdFdjRvUz
+
+        h. Goto any directory from gitbash create file like "vi config" then copy and paste the code from notepad
+        i. Goto Jenkins dashboard=>Manage Jenkins=>Credentials=>global credentials=> Add credentials=> In the Kind select the Secret file
+        j. Choose the file above where you have saved
+        k. under Id and description give any name like "config" finally click on create
+
+23. Set Up Kubernetes Cluster Access in Jenkins Pipeline
+    1. kubectl cluster-info [Type this command]
+    2. copy the URL and paste in the jenkins file under kubeconfig(credentialsId: 'config', serverUrl:"GIVE URL HERE")
+    3. Copy the argocd url and paster in the jenkins file under argocd login <GIVE YOUR ARGOCD URL HERE> --username admin
+    4. Goto Argocd=>Settings=>Repositories=>CONNECT REPO
+        under "Choose your connection method": select the VIA HTTP/HTTPS
+        under "project" select "default"
+        under "Repository URL" give your "github URL"
+        Give your username and password should be your personalized access token
+        Finally click on "CONNECT"
+    5. kubectl create secret generic groq-api-secret \
+  --from-literal=GROQ_API_KEY="GIVE YOUR GROQ API KEY HERE" \
+  -n argocd
+    6. Goto ArgoCD=>Applications=>New App=>Give application name, project Name should be "default", SYNC POLICY should be "Automatic", give "Repository URL"
+        give branch as Main, Give Revision as "manifests", Give Cluster URL, give namespace as AgroCD which we have created
+    7. finally click on "Create"
+    8. In the Jenkinsfile Instead of this line "argocd app sync study" give "argocd app sync <GIVE CREATED ARGOCD NAME>"
+    9. commit the code
 
