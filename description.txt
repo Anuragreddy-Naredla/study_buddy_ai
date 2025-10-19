@@ -60,5 +60,216 @@ streamlit run application.py
 ######################################
 
 ##### DEPLOYMENT STEPS ######
+1. Create the GCP account
+2. Search for "Compute Engine"
+3. search for "VM Instance"
+4. click on "Create Instance"
+5. Keep everything default but in the series select the "E2"
+6. In the "Machine Type", select "Standard" and select the 16GB RAM memory
+7. In the Left Goto "OS and Storage"
+    a. Click on "Change"
+    b. In the Operating System select the "Ubuntu"
+    c. In the vesion select the "Ubuntu 24.04 LTS"
+    d. In size give the 150GB
+    e. Finally click on select button.
+8. In the Left Goto "Networking"
+    a. under the "Firewall" click on all the 3checkboxes.
+    b. under the "IP Forwarding" click on "Enable" checkbox
+    c. finally click on "Create" button
+    d. It will take sometime to create after creation you should see the Green mark under the "Status" column.
+9. After creation click on "SSH" column then it will open the new window.
+10. click on Authorize then it will open a new console
+    TYPE BELOW COMMANDS IN THIS CONSOLE
+    a. git clone https://github.com/Anuragreddy-Naredla/study_buddy_ai.git
+    b. ls
+    c. cd <GIVE NAME HERE AFTER TYPING ls COMMAND YOU WILL GET>
+    d. COPY BELOW COMMAND AND PASTE IN GCP CONSOLE WHICH WILL INSTALL THE DOCKER
+            ###COMMAND 1#####
 
+            # Add Docker's official GPG key:
+            sudo apt-get update
+            sudo apt-get install ca-certificates curl
+            sudo install -m 0755 -d /etc/apt/keyrings
+            sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+            sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+            # Add the repository to Apt sources:
+            echo \
+            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+            $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            sudo apt-get update
+
+            ##### COMMAND 2#####
+            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+            click on Y then press enter
+
+            ##### COMMAND 3#######
+            sudo groupadd docker
+
+            ##### COMMAND 4#######
+            sudo usermod -aG docker $USER
+
+            ##### COMMAND 5#######
+            newgrp docker
+
+            ##### COMMAND 6#######
+            docker run hello-world
+
+            ##### COMMAND 7#######
+            sudo systemctl enable docker.service
+
+            ##### COMMAND 8#######
+            sudo systemctl enable containerd.service
+
+            ##### COMMAND 9#####
+            systemctl status docker
+
+            ##### COMMAND 10#####
+            docker ps
+
+            ##### COMMAND 11#####
+            docker ps -a
+
+    d. COPY BELOW COMMAND AND PASTE IN GCP CONSOLE WHICH WILL INSTALL THE MINIKUBE
+
+            ###COMMAND 1#####
+            curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
+
+            ###COMMAND 2#####
+            sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+
+            ###COMMAND 3#####
+            minikube start
+
+    e. COPY BELOW COMMAND AND PASTE IN GCP CONSOLE WHICH WILL INSTALL THE KUBECTL AND JENKINS
+            ###COMMAND 1#####
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+            ###COMMAND 2#####
+            sudo snap install kubectl --classic
+
+            ###COMMAND 3#####
+            kubectl version --client
+
+            ###COMMAND 4#####
+            minikube status
+
+            ###COMMAND 5#####
+            kubectl get nodes
+
+            ###COMMAND 6#####
+            kubectl cluster-info
+
+            ###COMMAND 7#####
+            docker network ls
+
+            ###COMMAND 8#####
+            docker run -d --name jenkins \
+            -p 8080:8080 \
+            -p 50000:50000 \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v $(which docker):/usr/bin/docker \
+            -u root \
+            -e DOCKER_GID=$(getent group docker | cut -d: -f3) \
+            --network minikube \
+            jenkins/jenkins:lts
+
+            ###COMMAND 9#####[TO CHECK WHETHER THE JENKINS AND MINIKUBE IS RUNNING OR NOT]
+            docker ps 
+
+            ###COMMAND 10#####
+            docker network ls
+
+11. Search for "Firewall" click on "Open VPC one" basically here we will create a firewall rule to create perform below STEPS
+    a. Click on "Create firewall rule"
+    b. Give any "Name" [allow-jenkins]
+    c. under "Network" it should be "default"
+    d. under "Direction of traffic" it should be "Ingress"
+    e. under "Action on match" it should be "Allow"
+    f. under the "Targets" select the "All instances in the network"
+    g. under the "Source filter" should be "IPv4 ranges"
+    h. under the "Source IPv4 ranges" give this one "0.0.0.0/0"
+    i. under the "Protocols and ports" select the "Allow all"
+    j. finally click on "Create Rule"
+
+12. under the VM instances copy the "External IP" and give it in the new browser and write ":8080"
+    a. 35.184.237.150:8080[LIKE THIS]
+    b. It will ask the password for jenkins for this type below COMMAND in GCP CONSOLE
+        ###COMMAND 1#####
+        docker logs jenkins [YO WILL GET THE PASSOWORD COPY AND PASTE IN THE EXTERNAL LINK]
+    c. select the "Installed Suggested Plugins"
+    d. Give username, password, fullname, and email
+    e. click on "Finish" button
+    f. Click on "Start using Jenkins"
+13. We have to install the required plugins in the jenkins
+    a. Go to "Manage Jenkins" then goto "Plugins" then goto "Available Plugins" on left
+    b. search for "Docker" select the "Docker", "Docker Pipeline"
+    c. search for "kubernetes" select the "kubernetes"
+    d. finally click on "Install"
+
+14. Goto "VMConsole" and type Below COMMANDS
+    #####COMMAND1####
+    docker exec -it jenkins bash [THIS WILL OPEN A JENKINS CONSOLE]
+
+    #####COMMAND2####
+    apt update -y
+
+    #####COMMAND3####
+    apt install -y python3
+
+    #####COMMAND4####
+    python3 --version
+
+    #####COMMAND5####
+    ln -s /usr/bin/python3 /usr/bin/python
+
+    #####COMMAND6####
+    python --version
+
+    #####COMMAND7####
+    apt install -y python3-pip
+
+    #####COMMAND8####
+    apt install -y python3-venv
+
+    #####COMMAND9####
+    exit
+
+15. TYpe below command for jenkins restart
+    docker restart jenkins
+
+16. Refresh the Jenkins page and give the username and password
+
+17. GITHUB INTEGRATION WITH THE JENKINS
+    1. Goto Github profile=>Goto Settings=> Goto "Developer Settings"=>Goto "Personal access tokens"=>select the "Tokens(classic)"
+    2. select the "Generate new token(Classic)"
+    3. under the "Note" give any name [study buddy ai]
+    4. under "Select Scopes" select the "repo", "workflow", "admin:org", admin:public_key, admin:repo_hook, admin:org_hook
+    5. Finally click on "Generate Token"
+    6. copy secret code and paste somewhere in laptop
+    7. Goto Jenkins page=>Manage jenkins=> Credentials=>(global)=>Add Credentials
+        a. under the username give the github username
+        b. under password paste the password which you have copied above
+        c. under Id and description give any name[github-token]
+        d. finally click on "Create"
+
+18. Create a New Pipeline Job in Jenkins
+    1. Goto Jenkins dashboard.
+    2. click on "New Item"
+    3. Give any name[study buddy ai]
+    4. click on "Pipeline" section then click on "Ok"
+    5. under the Pipeline section and under the description select the "Pipeline script from SCM" 
+    6. under SCM select the "Git"
+    7. under repository URL give the github url [https://github.com/Anuragreddy-Naredla/study_buddy_ai.git]
+    8. under the Credentials select the Github token which we have given
+    9. under branch give the github your branch name
+    10. finally click on "Apply" and "Save"
+    11. click on "pipeline syntax"
+    12. under sample step select the "checkout: Check out from version control"
+    13. Give the credentials and branch name 
+    14. Finally click on "Generate Pipeline Script"
+    15. copy this script and paste in "Jenkinsfile" below this line "echo 'Checking out code from GitHub...'"
+    16. commit the code to github
 
