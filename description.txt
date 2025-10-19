@@ -373,4 +373,12 @@ streamlit run application.py
     7. finally click on "Create"
     8. In the Jenkinsfile Instead of this line "argocd app sync study" give "argocd app sync <GIVE CREATED ARGOCD NAME>"
     9. commit the code
+    10. In the VMInstance goto the study_buddy_ai directory and write "git pull origin main"
+    11. kubectl get deploy -n argocd
+    12. minikube tunnel
+
+    AGAIN OPEN NEW TERMINAL AND TYPE BELOW COMMANDS
+    1. kubectl port-forward svc/<GIVE NAME WHICH YOU HAVE MENTIONED IN service.yaml FILE> -n argocd --address 0.0.0.0 9090:80     
+    2. COPythe external IP and add :9090
+    35.184.237.150:9090                                                                                                                             
 
