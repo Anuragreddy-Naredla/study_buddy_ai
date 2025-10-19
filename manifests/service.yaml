@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: study-buddy-service
+spec:
+  selector:
+    app: study-buddy-application # which name you gave in deployment.yaml file give that name here
+  ports:
+    - port: 80
+      targetPort: 8501  # default port for Streamlit
+  type: NodePort

@@ -53,3 +53,12 @@ Build and Push Docker image=>bulding and pushing the docker image to DockerHub
 ArgoCD Setup=>installing the argocd and setup
 Webhooks Github=>Whenever we build the pipeline we have to come to jenkins dashboard then wewill click on blue button to run the application this will be done automatically with the webhook
 
+##### TO RUN APPLICATION IN LOCAL#####
+
+streamlit run application.py
+
+######################################
+
+##### DEPLOYMENT STEPS ######
+
+
