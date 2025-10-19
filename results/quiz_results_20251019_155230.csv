@@ -1,0 +1,6 @@
+question_number,question,question_type,user_answer,correct_answer,is_correct,options
+1,Who among the following was the founder of the Delhi Sultanate?,MCQ,Qutb-ud-din Aibak,Qutb-ud-din Aibak,True,"['Qutb-ud-din Aibak', 'Muhammad Ghori', 'Prithviraj Chauhan', 'Iltutmish']"
+2,Which ancient Indian dynasty built the famous city of Hampi?,MCQ,Vijayanagara,Vijayanagara,True,"['Vijayanagara', 'Hoysala', 'Pallava', 'Chalukya']"
+3,Who was the Mughal Emperor who commissioned the construction of the Taj Mahal?,MCQ,Akbar,Shah Jahan,False,"['Akbar', 'Jahangir', 'Shah Jahan', 'Aurangzeb']"
+4,Which Indian emperor established the Vijayanagara Empire in 1336?,MCQ,Vikramaditya,Harihara,False,"['Vikramaditya', 'Rajendra Chola', 'Harihara', 'Kampana']"
+5,Which Indian emperor built the Red Fort in Delhi?,MCQ,Babur,Shah Jahan,False,"['Babur', 'Humayun', 'Akbar', 'Shah Jahan']"
